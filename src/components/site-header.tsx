@@ -20,10 +20,10 @@ export function SiteHeader() {
       <div className="container flex h-20 items-center">
         <Link href="/" className="flex items-center gap-4 font-bold text-lg text-primary">
           <Image src="/logo.png" alt="Nehru Group of Institutions" width={50} height={50} className="rounded-full"/>
-          <div className="flex flex-col items-start">
+          <div className="flex flex-col items-start leading-none gap-0">
             <span className="font-headline text-base text-blue-800">NEHRU GROUP</span>
             <span className="font-headline text-base text-blue-600">OF INSTITUTIONS</span>
-            <span className="text-xs font-light text-foreground/70">TAMILNADU • KERALA</span>
+            <span className="text-xs font-light text-foreground/70 mt-1">TAMILNADU • KERALA</span>
             <hr className="w-full border-foreground/30 my-0.5" />
             <span className="text-xs font-light tracking-wider text-foreground/60">www.nehrucolleges.com</span>
           </div>
