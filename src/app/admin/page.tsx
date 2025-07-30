@@ -64,6 +64,20 @@ export default function AdminPage() {
     }
   };
 
+  const handleProductImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        methods.setValue(`products.${index}.image`, reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
@@ -238,7 +252,34 @@ export default function AdminPage() {
                         <FormField name={`products.${index}.stallNumber`} render={({ field }) => <FormItem><FormLabel>Stall #</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
                     </div>
                     <FormField name={`products.${index}.description`} render={({ field }) => <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl></FormItem>} />
-                    <FormField name={`products.${index}.image`} render={({ field }) => <FormItem><FormLabel>Image URL</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                    <FormField
+                      control={methods.control}
+                      name={`products.${index}.image`}
+                      render={({ field: imageField }) => (
+                        <FormItem>
+                          <FormLabel>Product Image</FormLabel>
+                          <div className="flex items-center gap-4">
+                            {imageField.value && (
+                              <Image
+                                src={imageField.value}
+                                alt="Product Preview"
+                                width={60}
+                                height={60}
+                                className="h-16 w-16 rounded-md object-cover border p-1"
+                              />
+                            )}
+                            <FormControl>
+                              <Input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleProductImageChange(e, index)}
+                              />
+                            </FormControl>
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     <Button type="button" variant="destructive" size="sm" onClick={() => removeProduct(index)}>Remove Product</Button>
                   </div>
                 ))}
@@ -256,5 +297,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
-    
