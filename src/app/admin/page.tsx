@@ -86,7 +86,7 @@ export default function AdminPage() {
       </header>
 
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8 pb-24">
           
           <Card>
             <CardHeader><CardTitle>Event Details</CardTitle></CardHeader>
@@ -176,7 +176,11 @@ export default function AdminPage() {
             </CardContent>
           </Card>
           
-          <Button type="submit" size="lg" className="w-full">Save Changes</Button>
+          <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t border-border z-50">
+            <div className="container">
+              <Button type="submit" size="lg" className="w-full">Save Changes</Button>
+            </div>
+          </div>
         </form>
       </FormProvider>
     </div>
