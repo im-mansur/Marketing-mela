@@ -26,9 +26,9 @@ export function SiteHeader() {
     const logoSrc = data?.logoUrl || "/logo.png";
   return (
     <header className="w-full max-w-6xl bg-card/80 backdrop-blur-sm shadow-lg rounded-xl mb-auto">
-      <div className="container flex h-28 items-center">
+      <div className="container flex h-28 items-center justify-between">
         <Link href="/" className="flex items-center gap-4">
-          <Image src={logoSrc} alt="Nehru Group of Institutions Logo" width={60} height={60} className="h-16 w-16" />
+          <Image src={logoSrc} alt="Nehru Group of Institutions Logo" width={80} height={80} className="h-20 w-20" />
           <div className="flex flex-col">
               <span className="text-sm font-bold leading-tight" style={{color: '#0033A0'}}>NEHRU GROUP</span>
               <span className="text-sm font-bold leading-tight" style={{color: '#41A5E1'}}>OF INSTITUTIONS</span>
@@ -38,14 +38,14 @@ export function SiteHeader() {
               </div>
           </div>
         </Link>
-        <nav className="hidden md:flex flex-1 justify-end items-center gap-8 text-sm font-medium">
+        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
           {navLinks.map((link) => (
             <Link key={link.href} href={link.href} className="text-foreground/80 transition-colors hover:text-primary">
               {link.label}
             </Link>
           ))}
         </nav>
-        <div className="flex md:hidden flex-1 justify-end">
+        <div className="md:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
