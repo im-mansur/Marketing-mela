@@ -16,6 +16,7 @@ import { melaDataSchema } from '@/lib/schema';
 import type { MelaData } from '@/lib/types';
 import Image from 'next/image';
 import { format, parseISO } from 'date-fns';
+import { resizeImage } from '@/lib/utils';
 
 export default function AdminPage() {
   const { data, updateData, isLoading } = useMelaData();
@@ -54,28 +55,38 @@ export default function AdminPage() {
     toast({ title: "Success!", description: "Event details have been updated." });
   };
   
-  const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLogoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        form.setValue('logoUrl', reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const resizedDataUrl = await resizeImage(file, 200, 200);
+        form.setValue('logoUrl', resizedDataUrl);
+      } catch (error) {
+        toast({
+          title: 'Error resizing image',
+          description: 'Could not resize the logo image.',
+          variant: 'destructive',
+        });
+      }
     }
   };
 
-  const handleProductImageChange = (
+  const handleProductImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        form.setValue(`products.${index}.image`, reader.result as string);
-      };
-      reader.readAsDataURL(file);
+       try {
+        const resizedDataUrl = await resizeImage(file, 800, 600);
+        form.setValue(`products.${index}.image`, resizedDataUrl, { shouldDirty: true });
+      } catch (error) {
+        toast({
+          title: 'Error resizing image',
+          description: 'Could not resize the product image.',
+          variant: 'destructive',
+        });
+      }
     }
   };
 
