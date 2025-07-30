@@ -22,7 +22,7 @@ const navLinks = [
 
 export function SiteHeader() {
   return (
-    <header className="w-full bg-card/80 backdrop-blur-sm shadow-lg rounded-xl mb-auto">
+    <header className="w-full max-w-6xl bg-card/80 backdrop-blur-sm shadow-lg rounded-xl mb-auto">
       <div className="container flex h-20 items-center">
         <Link href="/" className="flex items-center gap-4">
           <Image src="/logo.png" alt="Nehru Group of Institutions Logo" width={50} height={50} className="h-12 w-12" />
@@ -42,6 +42,11 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
+        <div className="hidden md:flex items-center space-x-2">
+            <Button asChild>
+                <Link href="#">Admin Login</Link>
+            </Button>
+        </div>
         <div className="flex md:hidden flex-1 justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -56,6 +61,9 @@ export function SiteHeader() {
                   <Link href={link.href}>{link.label}</Link>
                 </DropdownMenuItem>
               ))}
+                <DropdownMenuItem asChild>
+                    <Link href="#">Admin Login</Link>
+                </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
