@@ -46,4 +46,9 @@ export type MelaData = {
   categories: Category[];
   products: Product[];
   stalls: Stall[];
+  footer: {
+    line1: string;
+    line2Prefix: string;
+    line2LinkText: string;
+  };
 };

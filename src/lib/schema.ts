@@ -49,4 +49,9 @@ export const melaDataSchema = z.object({
   categories: z.array(categorySchema),
   products: z.array(productSchema),
   stalls: z.array(stallSchema),
+  footer: z.object({
+    line1: z.string(),
+    line2Prefix: z.string(),
+    line2LinkText: z.string(),
+  }),
 });

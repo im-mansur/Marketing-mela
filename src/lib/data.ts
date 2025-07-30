@@ -18,6 +18,11 @@ export const defaultMelaData: MelaData = {
       { name: "Twitter", url: "#", icon: "Twitter" },
     ]
   },
+  footer: {
+    line1: `Built by students, for students. © ${new Date().getFullYear()} Nehru Group of Institutions.`,
+    line2Prefix: "Powered by ",
+    line2LinkText: "arketing Mela",
+  },
   categories: [
     { id: 'food', name: 'Food', emoji: '🍔' },
     { id: 'handmade', name: 'Handmade', emoji: '🎨' },
