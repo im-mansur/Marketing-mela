@@ -4,7 +4,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CountdownTimer } from "@/components/countdown-timer";
-import { SiteHeader } from "./site-header";
 import type { MelaData } from "@/lib/types";
 import { AppWindow, Info } from 'lucide-react';
 
@@ -33,12 +32,16 @@ export function HeroSection({ eventName, tagline, eventDate, logoUrl }: HeroSect
 
         <div className="w-full max-w-lg space-y-6">
             <CountdownTimer targetDate={eventDate} />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Button asChild size="lg" className="shadow-lg h-14 text-base">
-                <Link href="#categories"><AppWindow className="mr-2 h-5 w-5"/>Explore Categories</Link>
+                  <Link href="#categories" className="flex items-center justify-center">
+                    <AppWindow className="mr-2 h-5 w-5"/>Explore Categories
+                  </Link>
                 </Button>
                 <Button asChild size="lg" variant="secondary" className="shadow-lg h-14 text-base bg-primary text-primary-foreground hover:bg-primary/90">
-                <Link href="#stalls"><Info className="mr-2 h-5 w-5"/>Stall Details</Link>
+                  <Link href="#stalls" className="flex items-center justify-center">
+                    <Info className="mr-2 h-5 w-5"/>Stall Details
+                  </Link>
                 </Button>
             </div>
         </div>
