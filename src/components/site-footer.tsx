@@ -7,9 +7,12 @@ import { useMelaData } from "@/hooks/use-mela-data";
 export function SiteFooter() {
     const { data } = useMelaData();
     
-    if (!data || !data.footer) return null;
-
-    const { footer } = data;
+    // Fallback to default values if data or footer is not yet loaded.
+    const footer = data?.footer || {
+        line1: "Built by students, for students.",
+        line2Prefix: "Powered by ",
+        line2LinkText: "arketing Mela"
+    };
 
     return (
         <footer className="py-6 md:px-8 md:py-0 bg-primary text-primary-foreground">
