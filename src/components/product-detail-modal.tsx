@@ -34,9 +34,16 @@ const RatingStars = ({ rating }: { rating: number }) => (
 export function ProductDetailModal({ product, stall, category, isOpen, onOpenChange }: ProductDetailModalProps) {
   if (!product) return null;
 
+  const titleId = `product-title-${product.id}`;
+  const descriptionId = `product-description-${product.id}`;
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] grid-rows-[auto_1fr] p-0">
+      <DialogContent 
+        className="sm:max-w-[600px] grid-rows-[auto_1fr] p-0"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
+      >
         <DialogHeader className="p-6 pb-0">
             <div className='relative w-full h-64 rounded-t-lg overflow-hidden mb-4'>
                 <Image 
@@ -48,10 +55,10 @@ export function ProductDetailModal({ product, stall, category, isOpen, onOpenCha
                 />
             </div>
           <div className="flex justify-between items-start">
-            <DialogTitle className="text-2xl font-bold">{product.name}</DialogTitle>
+            <DialogTitle id={titleId} className="text-2xl font-bold">{product.name}</DialogTitle>
             <Badge variant="outline" className="text-sm">{category?.name || 'Category'}</Badge>
           </div>
-          <DialogDescription className="text-base">{product.description}</DialogDescription>
+          <DialogDescription id={descriptionId} className="text-base">{product.description}</DialogDescription>
         </DialogHeader>
         <div className="p-6 pt-2 grid gap-4">
             <div className="flex justify-between items-center">
