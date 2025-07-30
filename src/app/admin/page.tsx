@@ -15,6 +15,7 @@ import { useMelaData } from '@/hooks/use-mela-data';
 import { melaDataSchema } from '@/lib/schema';
 import type { MelaData } from '@/lib/types';
 import Image from 'next/image';
+import { format, parseISO } from 'date-fns';
 
 export default function AdminPage() {
   const { data, updateData, isLoading } = useMelaData();
@@ -102,7 +103,7 @@ export default function AdminPage() {
         <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8 pb-24">
           
           <Card>
-            <CardHeader><CardTitle>Branding</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Branding & Event Details</CardTitle></CardHeader>
             <CardContent className="space-y-4">
                <FormField
                 control={methods.control}
@@ -134,6 +135,25 @@ export default function AdminPage() {
               />
               <FormField name="eventName" render={({ field }) => <FormItem><FormLabel>Event Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
               <FormField name="tagline" render={({ field }) => <FormItem><FormLabel>Tagline</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
+              <FormField
+                control={methods.control}
+                name="eventDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Event Date and Time</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="datetime-local"
+                        value={field.value ? format(parseISO(field.value), "yyyy-MM-dd'T'HH:mm") : ''}
+                        onChange={(e) => {
+                          field.onChange(new Date(e.target.value).toISOString());
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </CardContent>
           </Card>
           
@@ -227,3 +247,5 @@ export default function AdminPage() {
     </div>
   );
 }
+
+    
