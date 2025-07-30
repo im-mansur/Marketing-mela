@@ -25,7 +25,7 @@ export function SiteHeader() {
     const { data } = useMelaData();
     const logoSrc = data?.logoUrl || "/logo.png";
   return (
-    <header className="w-full max-w-6xl bg-card/80 backdrop-blur-sm shadow-lg rounded-xl mb-auto">
+    <header className="w-full bg-card/80 backdrop-blur-sm shadow-lg rounded-xl">
       <div className="container flex h-28 items-center justify-between">
         <Link href="/" className="flex items-center gap-4">
           <Image src={logoSrc} alt="Nehru Group of Institutions Logo" width={80} height={80} className="h-20 w-20" />
