@@ -18,8 +18,16 @@ export function SiteHeader() {
   return (
     <header className="w-full bg-card/80 backdrop-blur-sm shadow-lg rounded-xl mb-auto">
       <div className="container flex h-20 items-center">
-        <Link href="/" className="flex items-center gap-4 font-bold text-lg text-primary">
-          <Image src="/logo.png" alt="Nehru Group of Institutions" width={150} height={150} />
+        <Link href="/" className="flex items-center gap-4">
+          <Image src="/logo.png" alt="Nehru Group of Institutions Logo" width={50} height={50} className="h-12 w-12" />
+          <div className="flex flex-col">
+              <span className="text-sm font-bold leading-tight" style={{color: '#0033A0'}}>NEHRU GROUP</span>
+              <span className="text-sm font-bold leading-tight" style={{color: '#41A5E1'}}>OF INSTITUTIONS</span>
+              <hr className="border-t-[1.5px] border-gray-300 my-1"/>
+              <div className="text-xs tracking-wider" style={{color: '#555'}}>
+                TAMILNADU <span className="text-gray-400 font-bold">•</span> KERALA
+              </div>
+          </div>
         </Link>
         <nav className="hidden md:flex flex-1 justify-center items-center gap-8 text-sm font-medium">
           {navLinks.map((link) => (
