@@ -199,15 +199,6 @@ export default function AdminPage() {
           </Card>
 
           <Card>
-            <CardHeader><CardTitle>Footer</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <FormField name="footer.line1" render={({ field }) => <FormItem><FormLabel>Footer Line 1</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
-              <FormField name="footer.line2Prefix" render={({ field }) => <FormItem><FormLabel>Footer Line 2 (Prefix)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
-              <FormField name="footer.line2LinkText" render={({ field }) => <FormItem><FormLabel>Footer Line 2 (Link Text)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
-            </CardContent>
-          </Card>
-
-          <Card>
             <CardHeader><CardTitle>Categories</CardTitle></CardHeader>
             <CardContent className="space-y-4">
                 {categoryFields.map((field, index) => (
