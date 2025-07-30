@@ -23,20 +23,21 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
 
-  const methods = useForm<MelaData>({
+  const form = useForm<MelaData>({
     resolver: zodResolver(melaDataSchema),
+    values: data ?? undefined,
   });
 
   useEffect(() => {
     if (data) {
-      methods.reset(data);
+      form.reset(data);
     }
-  }, [data, methods]);
+  }, [data, form]);
 
-  const { fields: categoryFields, append: appendCategory, remove: removeCategory } = useFieldArray({ control: methods.control, name: 'categories' });
-  const { fields: stallFields, append: appendStall, remove: removeStall } = useFieldArray({ control: methods.control, name: 'stalls' });
-  const { fields: productFields, append: appendProduct, remove: removeProduct } = useFieldArray({ control: methods.control, name: 'products' });
-  const { fields: socialFields, append: appendSocial, remove: removeSocial } = useFieldArray({ control: methods.control, name: 'contact.socials' });
+  const { fields: categoryFields, append: appendCategory, remove: removeCategory } = useFieldArray({ control: form.control, name: 'categories' });
+  const { fields: stallFields, append: appendStall, remove: removeStall } = useFieldArray({ control: form.control, name: 'stalls' });
+  const { fields: productFields, append: appendProduct, remove: removeProduct } = useFieldArray({ control: form.control, name: 'products' });
+  const { fields: socialFields, append: appendSocial, remove: removeSocial } = useFieldArray({ control: form.control, name: 'contact.socials' });
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +59,7 @@ export default function AdminPage() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        methods.setValue('logoUrl', reader.result as string);
+        form.setValue('logoUrl', reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -72,7 +73,7 @@ export default function AdminPage() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        methods.setValue(`products.${index}.image`, reader.result as string);
+        form.setValue(`products.${index}.image`, reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -113,14 +114,14 @@ export default function AdminPage() {
         <Button onClick={() => setIsAuthenticated(false)} variant="outline">Logout</Button>
       </header>
 
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8 pb-24">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pb-24">
           
           <Card>
             <CardHeader><CardTitle>Branding & Event Details</CardTitle></CardHeader>
             <CardContent className="space-y-4">
                <FormField
-                control={methods.control}
+                control={form.control}
                 name="logoUrl"
                 render={({ field }) => (
                   <FormItem>
@@ -138,7 +139,7 @@ export default function AdminPage() {
                       <FormControl>
                         <Input
                           type="file"
-                          accept="image/*,image/jpeg,image/png,image/gif,image/svg+xml"
+                          accept="image/*"
                           onChange={handleLogoChange}
                         />
                       </FormControl>
@@ -147,10 +148,10 @@ export default function AdminPage() {
                   </FormItem>
                 )}
               />
-              <FormField name="eventName" render={({ field }) => <FormItem><FormLabel>Event Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
-              <FormField name="tagline" render={({ field }) => <FormItem><FormLabel>Tagline</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
+              <FormField control={form.control} name="eventName" render={({ field }) => <FormItem><FormLabel>Event Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
+              <FormField control={form.control} name="tagline" render={({ field }) => <FormItem><FormLabel>Tagline</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="eventDate"
                 render={({ field }) => (
                   <FormItem>
@@ -174,22 +175,22 @@ export default function AdminPage() {
           <Card>
             <CardHeader><CardTitle>About Section</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-              <FormField name="about.title" render={({ field }) => <FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
-              <FormField name="about.content" render={({ field }) => <FormItem><FormLabel>Content</FormLabel><FormControl><Textarea {...field} rows={4} /></FormControl><FormMessage /></FormItem>} />
+              <FormField control={form.control} name="about.title" render={({ field }) => <FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
+              <FormField control={form.control} name="about.content" render={({ field }) => <FormItem><FormLabel>Content</FormLabel><FormControl><Textarea {...field} rows={4} /></FormControl><FormMessage /></FormItem>} />
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader><CardTitle>Contact Section</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-              <FormField name="contact.email" render={({ field }) => <FormItem><FormLabel>Email</FormLabel><FormControl><Input type="email" {...field} /></FormControl><FormMessage /></FormItem>} />
-              <FormField name="contact.phone" render={({ field }) => <FormItem><FormLabel>Phone</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
+              <FormField control={form.control} name="contact.email" render={({ field }) => <FormItem><FormLabel>Email</FormLabel><FormControl><Input type="email" {...field} /></FormControl><FormMessage /></FormItem>} />
+              <FormField control={form.control} name="contact.phone" render={({ field }) => <FormItem><FormLabel>Phone</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
               <div>
                 <h3 className="text-lg font-medium mb-2">Social Links</h3>
                 {socialFields.map((field, index) => (
                   <div key={field.id} className="grid grid-cols-[1fr_1fr_auto] gap-2 items-end mb-2 p-2 border rounded-md">
-                    <FormField name={`contact.socials.${index}.name`} render={({ field }) => <FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
-                    <FormField name={`contact.socials.${index}.url`} render={({ field }) => <FormItem><FormLabel>URL</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                    <FormField control={form.control} name={`contact.socials.${index}.name`} render={({ field }) => <FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                    <FormField control={form.control} name={`contact.socials.${index}.url`} render={({ field }) => <FormItem><FormLabel>URL</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
                     <Button type="button" variant="destructive" size="sm" onClick={() => removeSocial(index)}>Remove</Button>
                   </div>
                 ))}
@@ -203,9 +204,9 @@ export default function AdminPage() {
             <CardContent className="space-y-4">
                 {categoryFields.map((field, index) => (
                   <div key={field.id} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-end mb-2 p-2 border rounded-md">
-                    <FormField name={`categories.${index}.id`} render={({ field }) => <FormItem><FormLabel>ID</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
-                    <FormField name={`categories.${index}.name`} render={({ field }) => <FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
-                    <FormField name={`categories.${index}.emoji`} render={({ field }) => <FormItem><FormLabel>Emoji</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                    <FormField control={form.control} name={`categories.${index}.id`} render={({ field }) => <FormItem><FormLabel>ID</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                    <FormField control={form.control} name={`categories.${index}.name`} render={({ field }) => <FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                    <FormField control={form.control} name={`categories.${index}.emoji`} render={({ field }) => <FormItem><FormLabel>Emoji</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
                     <Button type="button" variant="destructive" size="sm" onClick={() => removeCategory(index)}>Remove</Button>
                   </div>
                 ))}
@@ -218,10 +219,10 @@ export default function AdminPage() {
             <CardContent className="space-y-4">
                 {stallFields.map((field, index) => (
                   <div key={field.id} className="grid grid-cols-[1fr_1fr_1fr_1fr_auto] gap-2 items-end mb-2 p-2 border rounded-md">
-                    <FormField name={`stalls.${index}.stallNumber`} render={({ field }) => <FormItem><FormLabel>Stall #</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
-                    <FormField name={`stalls.${index}.name`} render={({ field }) => <FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
-                    <FormField name={`stalls.${index}.description`} render={({ field }) => <FormItem><FormLabel>Description</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
-                    <FormField name={`stalls.${index}.owner`} render={({ field }) => <FormItem><FormLabel>Owner</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                    <FormField control={form.control} name={`stalls.${index}.stallNumber`} render={({ field }) => <FormItem><FormLabel>Stall #</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
+                    <FormField control={form.control} name={`stalls.${index}.name`} render={({ field }) => <FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                    <FormField control={form.control} name={`stalls.${index}.description`} render={({ field }) => <FormItem><FormLabel>Description</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                    <FormField control={form.control} name={`stalls.${index}.owner`} render={({ field }) => <FormItem><FormLabel>Owner</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
                     <Button type="button" variant="destructive" size="sm" onClick={() => removeStall(index)}>Remove</Button>
                   </div>
                 ))}
@@ -235,16 +236,16 @@ export default function AdminPage() {
                 {productFields.map((field, index) => (
                   <div key={field.id} className="space-y-2 mb-4 p-4 border rounded-md">
                     <div className="grid grid-cols-2 gap-4">
-                        <FormField name={`products.${index}.id`} render={({ field }) => <FormItem><FormLabel>ID</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
-                        <FormField name={`products.${index}.name`} render={({ field }) => <FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
-                        <FormField name={`products.${index}.price`} render={({ field }) => <FormItem><FormLabel>Price</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
-                        <FormField name={`products.${index}.rating`} render={({ field }) => <FormItem><FormLabel>Rating (1-5)</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
-                        <FormField name={`products.${index}.categoryId`} render={({ field }) => <FormItem><FormLabel>Category ID</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
-                        <FormField name={`products.${index}.stallNumber`} render={({ field }) => <FormItem><FormLabel>Stall #</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
+                        <FormField control={form.control} name={`products.${index}.id`} render={({ field }) => <FormItem><FormLabel>ID</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                        <FormField control={form.control} name={`products.${index}.name`} render={({ field }) => <FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                        <FormField control={form.control} name={`products.${index}.price`} render={({ field }) => <FormItem><FormLabel>Price</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
+                        <FormField control={form.control} name={`products.${index}.rating`} render={({ field }) => <FormItem><FormLabel>Rating (1-5)</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
+                        <FormField control={form.control} name={`products.${index}.categoryId`} render={({ field }) => <FormItem><FormLabel>Category ID</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
+                        <FormField control={form.control} name={`products.${index}.stallNumber`} render={({ field }) => <FormItem><FormLabel>Stall #</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
                     </div>
-                    <FormField name={`products.${index}.description`} render={({ field }) => <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl></FormItem>} />
+                    <FormField control={form.control} name={`products.${index}.description`} render={({ field }) => <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl></FormItem>} />
                     <FormField
-                      control={methods.control}
+                      control={form.control}
                       name={`products.${index}.image`}
                       render={({ field: imageField }) => (
                         <FormItem>
@@ -262,7 +263,7 @@ export default function AdminPage() {
                             <FormControl>
                               <Input
                                 type="file"
-                                accept="image/*,image/jpeg,image/png,image/gif,image/svg+xml"
+                                accept="image/*"
                                 onChange={(e) => handleProductImageChange(e, index)}
                               />
                             </FormControl>
@@ -284,9 +285,7 @@ export default function AdminPage() {
             </div>
           </div>
         </form>
-      </FormProvider>
+      </Form>
     </div>
   );
 }
-
-    
