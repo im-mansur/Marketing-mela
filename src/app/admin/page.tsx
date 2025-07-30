@@ -138,7 +138,7 @@ export default function AdminPage() {
                       <FormControl>
                         <Input
                           type="file"
-                          accept="image/*"
+                          accept="image/*,image/jpeg,image/png,image/gif,image/svg+xml"
                           onChange={handleLogoChange}
                         />
                       </FormControl>
@@ -262,7 +262,7 @@ export default function AdminPage() {
                             <FormControl>
                               <Input
                                 type="file"
-                                accept="image/*"
+                                accept="image/*,image/jpeg,image/png,image/gif,image/svg+xml"
                                 onChange={(e) => handleProductImageChange(e, index)}
                               />
                             </FormControl>
@@ -288,3 +288,5 @@ export default function AdminPage() {
     </div>
   );
 }
+
+    
