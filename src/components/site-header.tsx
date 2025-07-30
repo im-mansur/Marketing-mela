@@ -34,9 +34,6 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="hidden md:flex items-center gap-4">
-            <Button>Admin Login</Button>
-        </div>
         <div className="flex md:hidden flex-1 justify-end">
           <Sheet>
             <SheetTrigger asChild>
@@ -58,7 +55,6 @@ export function SiteHeader() {
                     </SheetTrigger>
                   </Link>
                 ))}
-                <Button>Admin Login</Button>
               </nav>
             </SheetContent>
           </Sheet>
