@@ -115,9 +115,9 @@ export default function AdminPage() {
                         <Image
                           src={field.value}
                           alt="Logo Preview"
-                          width={60}
-                          height={60}
-                          className="h-16 w-16 rounded-md object-contain border p-1"
+                          width={80}
+                          height={80}
+                          className="h-20 w-20 rounded-md object-contain border p-1"
                         />
                       )}
                       <FormControl>
