@@ -3,29 +3,32 @@
 import { useEffect, useState, useCallback } from 'react';
 
 // A single confetti piece component
-const ConfettiPiece = ({ style }: { style: React.CSSProperties }) => (
-  <div className="absolute w-2 h-4" style={style} />
+const ConfettiPiece = ({ style, id }: { style: React.CSSProperties, id: number }) => (
+  <div key={id} className="absolute w-2 h-4" style={style} />
 );
 
 // The main confetti component
 const Confetti = () => {
-  const [pieces, setPieces] = useState<React.CSSProperties[]>([]);
+  const [pieces, setPieces] = useState<{style: React.CSSProperties, id: number}[]>([]);
 
   useEffect(() => {
     const colors = ['#D633FF', '#8A2BE2', '#f0eafd', '#FFC700', '#FF4D4D'];
-    const newPieces = Array.from({ length: 150 }).map(() => ({
-      left: `${Math.random() * 100}%`,
-      top: `${-20 + Math.random() * -80}px`,
-      backgroundColor: colors[Math.floor(Math.random() * colors.length)],
-      transform: `rotate(${Math.random() * 360}deg)`,
-      animation: `fall ${2 + Math.random() * 3}s ${Math.random() * 2}s linear forwards`,
+    const newPieces = Array.from({ length: 150 }).map((_, i) => ({
+      id: i,
+      style: {
+        left: `${Math.random() * 100}%`,
+        top: `${-20 + Math.random() * -80}px`,
+        backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+        transform: `rotate(${Math.random() * 360}deg)`,
+        animation: `fall ${2 + Math.random() * 3}s ${Math.random() * 2}s linear forwards`,
+      }
     }));
     setPieces(newPieces);
   }, []);
 
   return (
     <div className="fixed inset-0 z-[200] pointer-events-none overflow-hidden">
-      {pieces.map((style, i) => <ConfettiPiece key={i} style={style} />)}
+      {pieces.map(({style, id}) => <ConfettiPiece key={id} style={style} id={id} />)}
     </div>
   );
 };
