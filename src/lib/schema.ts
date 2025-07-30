@@ -33,6 +33,7 @@ export const stallSchema = z.object({
 });
 
 export const melaDataSchema = z.object({
+  logoUrl: z.string().optional(),
   eventName: z.string(),
   tagline: z.string(),
   eventDate: z.string(), // ISO string

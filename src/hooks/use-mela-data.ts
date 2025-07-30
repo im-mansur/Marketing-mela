@@ -29,13 +29,11 @@ export function useMelaData() {
     }
   }, []);
 
-  const updateData = (newData: Partial<MelaData>) => {
-    setData(prevData => {
-        if (!prevData) return null;
-        const updatedData = { ...prevData, ...newData };
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedData));
-        return updatedData;
-    });
+  const updateData = (newData: MelaData) => {
+    // When updating, we replace the whole object.
+    // This is because form libraries often work with the whole object.
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(newData));
+    setData(newData);
   };
   
   return { data, updateData, isLoading: data === null };

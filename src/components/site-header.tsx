@@ -11,6 +11,7 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
+import { useMelaData } from "@/hooks/use-mela-data";
 
 const navLinks = [
   { href: "#home", label: "Home" },
@@ -21,11 +22,13 @@ const navLinks = [
 ];
 
 export function SiteHeader() {
+    const { data } = useMelaData();
+    const logoSrc = data?.logoUrl || "/logo.png";
   return (
     <header className="w-full max-w-6xl bg-card/80 backdrop-blur-sm shadow-lg rounded-xl mb-auto">
       <div className="container flex h-24 items-center">
         <Link href="/" className="flex items-center gap-4">
-          <Image src="/logo.png" alt="Nehru Group of Institutions Logo" width={50} height={50} className="h-12 w-12" />
+          <Image src={logoSrc} alt="Nehru Group of Institutions Logo" width={50} height={50} className="h-12 w-12" />
           <div className="flex flex-col">
               <span className="text-sm font-bold leading-tight" style={{color: '#0033A0'}}>NEHRU GROUP</span>
               <span className="text-sm font-bold leading-tight" style={{color: '#41A5E1'}}>OF INSTITUTIONS</span>

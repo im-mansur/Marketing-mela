@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -53,6 +54,7 @@ export default function Home() {
           eventName={data.eventName} 
           tagline={data.tagline} 
           eventDate={data.eventDate}
+          logoUrl={data.logoUrl}
         />
         <CategoriesSection 
           categories={data.categories}

@@ -1,6 +1,7 @@
 import type { MelaData } from '@/lib/types';
 
 export const defaultMelaData: MelaData = {
+  logoUrl: "/logo.png",
   eventName: "Marketing Mela",
   tagline: "Catch the Craze – See What's Coming Tomorrow!",
   eventDate: "", // This will be set dynamically in the useMelaData hook

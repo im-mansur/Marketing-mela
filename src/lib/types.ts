@@ -30,6 +30,7 @@ export type Stall = {
 };
 
 export type MelaData = {
+  logoUrl?: string; // Data URL for the logo
   eventName: string;
   tagline: string;
   eventDate: string; // ISO string

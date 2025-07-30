@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useMelaData } from '@/hooks/use-mela-data';
 import { melaDataSchema } from '@/lib/schema';
 import type { MelaData } from '@/lib/types';
+import Image from 'next/image';
 
 export default function AdminPage() {
   const { data, updateData, isLoading } = useMelaData();
@@ -50,6 +51,18 @@ export default function AdminPage() {
     updateData(formData);
     toast({ title: "Success!", description: "Event details have been updated." });
   };
+  
+  const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        methods.setValue('logoUrl', reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
@@ -89,8 +102,36 @@ export default function AdminPage() {
         <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8 pb-24">
           
           <Card>
-            <CardHeader><CardTitle>Event Details</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Branding</CardTitle></CardHeader>
             <CardContent className="space-y-4">
+               <FormField
+                control={methods.control}
+                name="logoUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Logo Image</FormLabel>
+                    <div className="flex items-center gap-4">
+                      {field.value && (
+                        <Image
+                          src={field.value}
+                          alt="Logo Preview"
+                          width={60}
+                          height={60}
+                          className="h-16 w-16 rounded-md object-contain border p-1"
+                        />
+                      )}
+                      <FormControl>
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleLogoChange}
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField name="eventName" render={({ field }) => <FormItem><FormLabel>Event Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
               <FormField name="tagline" render={({ field }) => <FormItem><FormLabel>Tagline</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
             </CardContent>
