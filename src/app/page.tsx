@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useMelaData } from "@/hooks/use-mela-data";
 
-import { SiteHeader } from "@/components/site-header";
 import { HeroSection } from "@/components/hero-section";
 import { CategoriesSection } from "@/components/categories-section";
 import { ProductsSection } from "@/components/products-section";
@@ -12,6 +11,7 @@ import { ContactSection } from "@/components/contact-section";
 import { SiteFooter } from "@/components/site-footer";
 import { ConfettiTrigger } from "@/components/confetti-trigger";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SiteHeader } from "@/components/site-header";
 
 export default function Home() {
   const { data, isLoading } = useMelaData();
@@ -48,7 +48,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <SiteHeader />
       <main className="flex-1">
         <HeroSection 
           eventName={data.eventName} 
