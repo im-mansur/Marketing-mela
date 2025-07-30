@@ -7,7 +7,7 @@ import { useMelaData } from "@/hooks/use-mela-data";
 export function SiteFooter() {
     const { data } = useMelaData();
     
-    if (!data) return null;
+    if (!data || !data.footer) return null;
 
     const { footer } = data;
 
