@@ -23,7 +23,7 @@ const navLinks = [
 export function SiteHeader() {
   return (
     <header className="w-full max-w-6xl bg-card/80 backdrop-blur-sm shadow-lg rounded-xl mb-auto">
-      <div className="container flex h-20 items-center">
+      <div className="container flex h-24 items-center">
         <Link href="/" className="flex items-center gap-4">
           <Image src="/logo.png" alt="Nehru Group of Institutions Logo" width={50} height={50} className="h-12 w-12" />
           <div className="flex flex-col">
