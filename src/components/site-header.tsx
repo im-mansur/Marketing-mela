@@ -24,6 +24,7 @@ export function SiteHeader() {
             <span className="font-headline text-base text-blue-800">NEHRU GROUP</span>
             <span className="font-headline text-base text-blue-600">OF INSTITUTIONS</span>
             <span className="text-xs font-light text-foreground/70">TAMILNADU • KERALA</span>
+            <hr className="w-full border-foreground/30 my-0.5" />
             <span className="text-xs font-light tracking-wider text-foreground/60">www.nehrucolleges.com</span>
           </div>
         </Link>
