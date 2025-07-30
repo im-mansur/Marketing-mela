@@ -42,11 +42,6 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="hidden md:flex items-center space-x-2">
-            <Button asChild>
-                <Link href="#">Admin Login</Link>
-            </Button>
-        </div>
         <div className="flex md:hidden flex-1 justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -61,9 +56,6 @@ export function SiteHeader() {
                   <Link href={link.href}>{link.label}</Link>
                 </DropdownMenuItem>
               ))}
-                <DropdownMenuItem asChild>
-                    <Link href="#">Admin Login</Link>
-                </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
