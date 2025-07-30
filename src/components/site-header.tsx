@@ -35,7 +35,7 @@ export function SiteHeader() {
               </div>
           </div>
         </Link>
-        <nav className="hidden md:flex flex-1 justify-center items-center gap-8 text-sm font-medium">
+        <nav className="hidden md:flex flex-1 justify-end items-center gap-8 text-sm font-medium">
           {navLinks.map((link) => (
             <Link key={link.href} href={link.href} className="text-foreground/80 transition-colors hover:text-primary">
               {link.label}
