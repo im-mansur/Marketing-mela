@@ -19,7 +19,7 @@ export function SiteHeader() {
       <div className="container flex h-16 items-center">
         <Link href="/" className="flex items-center gap-2 font-bold text-lg text-primary">
           <University className="h-6 w-6" />
-          <span className="font-headline">Melaverse</span>
+          <span className="font-headline">Marketing Mela</span>
         </Link>
         <nav className="hidden md:flex flex-1 justify-center items-center gap-6 text-sm font-medium">
           {navLinks.map((link) => (
@@ -40,7 +40,7 @@ export function SiteHeader() {
               <nav className="grid gap-6 text-lg font-medium p-6">
                 <Link href="/" className="flex items-center gap-2 font-bold text-lg text-primary mb-4">
                   <University className="h-6 w-6" />
-                  <span className="font-headline">Melaverse</span>
+                  <span className="font-headline">Marketing Mela</span>
                 </Link>
                 {navLinks.map((link) => (
                   <Link key={link.href} href={link.href} className="text-foreground/80 transition-colors hover:text-primary">

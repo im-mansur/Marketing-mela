@@ -1,8 +1,8 @@
 import type { MelaData } from '@/lib/types';
 
 export const defaultMelaData: MelaData = {
-  eventName: "Melaverse",
-  tagline: "Explore the Universe of Marketing at NGI's Grand Mela!",
+  eventName: "Marketing Mela",
+  tagline: "Catch the Craze – See What's Coming Tomorrow!",
   eventDate: "", // This will be set dynamically in the useMelaData hook
   about: {
     title: "About Marketing Mela",

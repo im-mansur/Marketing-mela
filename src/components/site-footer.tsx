@@ -8,7 +8,7 @@ export function SiteFooter() {
                     Built by students, for students. © {new Date().getFullYear()} Nehru Group of Institutions.
                 </p>
                 <p className="text-center text-sm leading-loose md:text-left">
-                    Powered by <span className="font-bold">Melaverse</span>.
+                    Powered by <span className="font-bold">Marketing Mela</span>.
                 </p>
             </div>
         </footer>
