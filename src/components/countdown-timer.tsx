@@ -30,8 +30,15 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
-    setTimeLeft(calculateTimeLeft(targetDate));
+    // This check is to prevent rendering on the server where new Date() might differ.
+    // It ensures this component only renders on the client.
+    if (typeof window !== 'undefined') {
+      setTimeLeft(calculateTimeLeft(targetDate));
+    }
+  }, [targetDate]);
 
+
+  useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft(targetDate));
     }, 1000);
@@ -41,8 +48,10 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
   
   if (!timeLeft) {
     return (
-      <div className="text-2xl font-bold text-accent">
-        The event is happening now!
+      <div className="text-center py-4">
+        <div className="text-2xl font-bold text-accent">
+          The event is happening now!
+        </div>
       </div>
     );
   }
@@ -55,15 +64,18 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-flow-col sm:auto-cols-max gap-4 my-6">
-      {timeParts.map(({ label, value }) => (
-        <div key={label} className="flex flex-col p-4 bg-secondary rounded-lg shadow-inner text-center">
-          <span className="font-mono text-4xl md:text-5xl font-bold text-accent">
-            {String(value).padStart(2, '0')}
-          </span>
-          <span className="text-sm uppercase font-semibold text-secondary-foreground/70">{label}</span>
-        </div>
-      ))}
+    <div className="text-center p-6 bg-secondary rounded-xl shadow-lg w-full max-w-md mx-auto">
+      <h3 className="text-sm font-medium text-secondary-foreground/80 mb-4 tracking-wider">TIME LEFT UNTIL STALLS OPEN</h3>
+      <div className="grid grid-cols-4 gap-2">
+        {timeParts.map(({ label, value }) => (
+          <div key={label} className="flex flex-col items-center justify-center">
+            <span className="text-5xl font-bold text-accent tabular-nums">
+              {String(value).padStart(2, '0')}
+            </span>
+            <span className="text-xs uppercase font-semibold text-secondary-foreground/60 mt-1">{label}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
