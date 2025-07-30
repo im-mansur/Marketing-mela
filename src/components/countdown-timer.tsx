@@ -55,9 +55,9 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
   ];
 
   return (
-    <div className="grid grid-flow-col gap-5 text-center auto-cols-max my-6">
+    <div className="grid grid-cols-2 sm:grid-flow-col sm:auto-cols-max gap-4 my-6">
       {timeParts.map(({ label, value }) => (
-        <div key={label} className="flex flex-col p-4 bg-secondary rounded-lg shadow-inner">
+        <div key={label} className="flex flex-col p-4 bg-secondary rounded-lg shadow-inner text-center">
           <span className="font-mono text-4xl md:text-5xl font-bold text-accent">
             {String(value).padStart(2, '0')}
           </span>
