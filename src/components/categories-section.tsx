@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Category } from "@/lib/types";
@@ -13,6 +14,14 @@ interface CategoriesSectionProps {
 export function CategoriesSection({ categories, setFilter, activeFilter }: CategoriesSectionProps) {
   const allCategories = [{ id: 'all', name: 'All', emoji: '✨' }, ...categories];
   
+  const handleFilterClick = (filter: string) => {
+    setFilter(filter);
+    const productsSection = document.getElementById('stalls');
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="categories" className="py-12 md:py-20 bg-background">
       <div className="container">
@@ -24,7 +33,7 @@ export function CategoriesSection({ categories, setFilter, activeFilter }: Categ
           {allCategories.map((category) => (
             <Card
               key={category.id}
-              onClick={() => setFilter(category.id)}
+              onClick={() => handleFilterClick(category.id)}
               className={cn(
                 "cursor-pointer group transition-all duration-300 transform hover:scale-105 hover:shadow-xl border-2",
                 activeFilter === category.id 
