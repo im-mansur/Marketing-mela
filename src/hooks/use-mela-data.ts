@@ -11,15 +11,14 @@ export function useMelaData() {
 
   useEffect(() => {
     try {
-      const item = window.localStorage.getItem(STORAGE_KEY);
-      if (item) {
-        setData(JSON.parse(item));
-      } else {
-        const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
-        const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initialData));
-        setData(initialData);
-      }
+      // Clear old data to ensure updates are applied
+      window.localStorage.removeItem(STORAGE_KEY);
+      
+      const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+      const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initialData));
+      setData(initialData);
+
     } catch (error) {
       console.error("Failed to read from localStorage", error);
       const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
