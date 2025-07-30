@@ -3,8 +3,6 @@
 
 import { useState, useEffect } from 'react';
 import { useForm, useFieldArray, FormProvider } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -12,7 +10,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useMelaData } from '@/hooks/use-mela-data';
-import { melaDataSchema } from '@/lib/schema';
 import type { MelaData } from '@/lib/types';
 import Image from 'next/image';
 import { format, parseISO } from 'date-fns';
@@ -25,7 +22,6 @@ export default function AdminPage() {
   const [password, setPassword] = useState('');
 
   const form = useForm<MelaData>({
-    resolver: zodResolver(melaDataSchema),
     values: data ?? undefined,
   });
 
