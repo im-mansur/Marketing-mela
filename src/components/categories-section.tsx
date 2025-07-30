@@ -29,7 +29,7 @@ export function CategoriesSection({ categories, setFilter, activeFilter }: Categ
           <h2 className="text-3xl md:text-4xl font-bold font-headline">Explore Our Categories</h2>
           <p className="text-lg text-muted-foreground mt-2">Find what you love from a wide range of products.</p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {allCategories.map((category) => (
             <Card
               key={category.id}
@@ -41,11 +41,11 @@ export function CategoriesSection({ categories, setFilter, activeFilter }: Categ
                   : "border-border hover:border-primary/50"
               )}
             >
-              <CardContent className="flex flex-col items-center justify-center p-6 gap-3">
-                <span className="text-5xl transition-transform duration-300 group-hover:rotate-12">
+              <CardContent className="flex flex-col items-center justify-center p-6 gap-4">
+                <span className="text-6xl transition-transform duration-300 group-hover:rotate-12">
                   {category.emoji}
                 </span>
-                <p className="font-semibold text-center">{category.name}</p>
+                <p className="font-semibold text-lg text-center">{category.name}</p>
               </CardContent>
             </Card>
           ))}
