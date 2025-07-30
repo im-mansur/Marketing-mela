@@ -9,7 +9,7 @@ export const defaultMelaData: MelaData = {
     content: "Marketing Mela is the flagship event of Nehru Group of Institutions, celebrating creativity, innovation, and the spirit of entrepreneurship. It's a platform for students to showcase their marketing prowess, from product creation to promotion. Join us for a day of fun, food, and fantastic finds!"
   },
   contact: {
-    email: "contact@melaverse-ngi.com",
+    email: "contact@marketing-mela-ngi.com",
     phone: "+91 123 456 7890",
     socials: [
       { name: "Facebook", url: "#", icon: "Facebook" },
