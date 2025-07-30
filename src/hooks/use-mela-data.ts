@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -11,16 +12,17 @@ export function useMelaData() {
 
   useEffect(() => {
     try {
-      // Clear old data to ensure updates are applied
-      window.localStorage.removeItem(STORAGE_KEY);
-      
-      const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
-      const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initialData));
-      setData(initialData);
-
+      const storedData = window.localStorage.getItem(STORAGE_KEY);
+      if (storedData) {
+        setData(JSON.parse(storedData));
+      } else {
+        const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+        const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initialData));
+        setData(initialData);
+      }
     } catch (error) {
-      console.error("Failed to read from localStorage", error);
+      console.error("Failed to access localStorage", error);
       const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
       const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
       setData(initialData);
@@ -28,10 +30,12 @@ export function useMelaData() {
   }, []);
 
   const updateData = (newData: Partial<MelaData>) => {
-    if (!data) return;
-    const updatedData = { ...data, ...newData };
-    setData(updatedData);
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedData));
+    setData(prevData => {
+        if (!prevData) return null;
+        const updatedData = { ...prevData, ...newData };
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedData));
+        return updatedData;
+    });
   };
   
   return { data, updateData, isLoading: data === null };
