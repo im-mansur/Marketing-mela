@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const socialSchema = z.object({
   name: z.string(),
-  url: z.string().url(),
+  url: z.string(),
   icon: z.string(),
 });
 
@@ -18,8 +18,8 @@ export const productSchema = z.object({
   name: z.string(),
   description: z.string(),
   price: z.number(),
-  rating: z.number().min(1).max(5),
-  image: z.string().url(),
+  rating: z.number().min(0).max(5),
+  image: z.string(),
   categoryId: z.string(),
   stallNumber: z.number(),
   'data-ai-hint': z.string().optional(),
@@ -42,7 +42,7 @@ export const melaDataSchema = z.object({
       content: z.string(),
   }),
   contact: z.object({
-      email: z.string().email(),
+      email: z.string(),
       phone: z.string(),
       socials: z.array(socialSchema),
   }),

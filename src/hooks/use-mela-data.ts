@@ -1,40 +1,50 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { MelaData } from '@/lib/types';
-import { defaultMelaData } from '@/lib/data';
+import { readData, writeData } from '@/lib/firebase';
+import { useToast } from './use-toast';
 
-const STORAGE_KEY = 'melaData';
 
 export function useMelaData() {
   const [data, setData] = useState<MelaData | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
-    try {
-      const storedData = window.localStorage.getItem(STORAGE_KEY);
-      if (storedData) {
-        setData(JSON.parse(storedData));
-      } else {
-        const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
-        const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initialData));
-        setData(initialData);
-      }
-    } catch (error) {
-      console.error("Failed to access localStorage", error);
-      const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
-      const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
-      setData(initialData);
-    }
-  }, []);
+    const fetchData = async () => {
+        try {
+            const remoteData = await readData();
+            setData(remoteData);
+        } catch (error) {
+            console.error("Failed to fetch data from Firebase", error);
+            toast({
+                title: "Error",
+                description: "Could not load event data. Please try again later.",
+                variant: "destructive"
+            });
+        }
+    };
+    fetchData();
+  }, [toast]);
 
-  const updateData = (newData: MelaData) => {
-    // When updating, we replace the whole object.
-    // This is because form libraries often work with the whole object.
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(newData));
-    setData(newData);
-  };
+  const updateData = useCallback(async (newData: MelaData) => {
+    try {
+        await writeData(newData);
+        setData(newData);
+         toast({
+            title: "Success!",
+            description: "Event details have been updated."
+        });
+    } catch(error) {
+        console.error("Failed to update data in Firebase", error);
+        toast({
+            title: "Error",
+            description: "Could not save changes. Please check your connection and try again.",
+            variant: "destructive"
+        });
+    }
+  }, [toast]);
   
   return { data, updateData, isLoading: data === null };
 }

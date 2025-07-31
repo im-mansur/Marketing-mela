@@ -14,6 +14,8 @@ import type { MelaData } from '@/lib/types';
 import Image from 'next/image';
 import { format, parseISO } from 'date-fns';
 import { resizeImage } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { melaDataSchema } from '@/lib/schema';
 
 export default function AdminPage() {
   const { data, updateData, isLoading } = useMelaData();
@@ -22,6 +24,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState('');
 
   const form = useForm<MelaData>({
+    resolver: zodResolver(melaDataSchema),
     values: data ?? undefined,
   });
 
@@ -48,7 +51,6 @@ export default function AdminPage() {
 
   const onSubmit = (formData: MelaData) => {
     updateData(formData);
-    toast({ title: "Success!", description: "Event details have been updated." });
   };
   
   const handleLogoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
