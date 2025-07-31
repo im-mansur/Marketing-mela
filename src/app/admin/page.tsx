@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useForm, useFieldArray, FormProvider } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,8 +14,6 @@ import type { MelaData } from '@/lib/types';
 import Image from 'next/image';
 import { format, parseISO } from 'date-fns';
 import { resizeImage } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { melaDataSchema } from '@/lib/schema';
 
 export default function AdminPage() {
   const { data, updateData, isLoading } = useMelaData();
@@ -24,7 +22,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState('');
 
   const form = useForm<MelaData>({
-    resolver: zodResolver(melaDataSchema),
+    // No resolver, so no validation
     values: data ?? undefined,
   });
 
@@ -228,7 +226,7 @@ export default function AdminPage() {
             <CardContent className="space-y-4">
                 {stallFields.map((field, index) => (
                   <div key={field.id} className="grid grid-cols-[1fr_1fr_1fr_1fr_auto] gap-2 items-end mb-2 p-2 border rounded-md">
-                    <FormField control={form.control} name={`stalls.${index}.stallNumber`} render={({ field }) => <FormItem><FormLabel>Stall #</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
+                    <FormField control={form.control} name={`stalls.${index}.stallNumber`} render={({ field }) => <FormItem><FormLabel>Stall #</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(e.target.value === '' ? '' : parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
                     <FormField control={form.control} name={`stalls.${index}.name`} render={({ field }) => <FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
                     <FormField control={form.control} name={`stalls.${index}.description`} render={({ field }) => <FormItem><FormLabel>Description</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
                     <FormField control={form.control} name={`stalls.${index}.owner`} render={({ field }) => <FormItem><FormLabel>Owner</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
@@ -247,10 +245,10 @@ export default function AdminPage() {
                     <div className="grid grid-cols-2 gap-4">
                         <FormField control={form.control} name={`products.${index}.id`} render={({ field }) => <FormItem><FormLabel>ID</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
                         <FormField control={form.control} name={`products.${index}.name`} render={({ field }) => <FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
-                        <FormField control={form.control} name={`products.${index}.price`} render={({ field }) => <FormItem><FormLabel>Price</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
-                        <FormField control={form.control} name={`products.${index}.rating`} render={({ field }) => <FormItem><FormLabel>Rating (1-5)</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
+                        <FormField control={form.control} name={`products.${index}.price`} render={({ field }) => <FormItem><FormLabel>Price</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(e.target.value === '' ? '' : parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
+                        <FormField control={form.control} name={`products.${index}.rating`} render={({ field }) => <FormItem><FormLabel>Rating (1-5)</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(e.target.value === '' ? '' : parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
                         <FormField control={form.control} name={`products.${index}.categoryId`} render={({ field }) => <FormItem><FormLabel>Category ID</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>} />
-                        <FormField control={form.control} name={`products.${index}.stallNumber`} render={({ field }) => <FormItem><FormLabel>Stall #</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
+                        <FormField control={form.control} name={`products.${index}.stallNumber`} render={({ field }) => <FormItem><FormLabel>Stall #</FormLabel><FormControl><Input type="number" {...field} onChange={e => field.onChange(e.target.value === '' ? '' : parseInt(e.target.value, 10))}/></FormControl></FormItem>} />
                     </div>
                     <FormField control={form.control} name={`products.${index}.description`} render={({ field }) => <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl></FormItem>} />
                     <FormField
