@@ -1,6 +1,6 @@
 
 import { initializeApp, getApp, getApps } from 'firebase/app';
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get, Database } from "firebase/database";
 import { defaultMelaData } from './data';
 import type { MelaData } from './types';
 
@@ -15,7 +15,9 @@ const firebaseConfig = {
   "databaseURL": "https://melaverse-default-rtdb.firebaseio.com"
 };
 
-function getFirebase() {
+// This function safely initializes and returns the Firebase app and database instances.
+// It ensures that initialization only happens on the client side and only once.
+function getFirebaseServices() {
     const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
     const database = getDatabase(app);
     return { app, database };
@@ -24,18 +26,23 @@ function getFirebase() {
 const DB_KEY = 'melaData';
 
 export async function writeData(data: MelaData) {
-  const { database } = getFirebase();
+  // Ensure we are on the client before trying to write.
+  if (typeof window === 'undefined') return;
+  const { database } = getFirebaseServices();
   return set(ref(database, DB_KEY), data);
 }
 
 export async function readData(): Promise<MelaData> {
+  // This function should only be called on the client.
+  // The useMelaData hook will ensure this.
   try {
-    const { database } = getFirebase();
+    const { database } = getFirebaseServices();
     const snapshot = await get(ref(database, DB_KEY));
     if (snapshot.exists()) {
       return snapshot.val();
     } else {
       // If no data, initialize with default and return that.
+      console.log('No data found in Firebase, initializing with default data.');
       const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
       const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
       await writeData(initialData);

@@ -14,25 +14,21 @@ export function useMelaData() {
   const { toast } = useToast();
 
   useEffect(() => {
+    // This useEffect hook will only run on the client side, after the component has mounted.
+    // This is the correct place to fetch data from Firebase.
     const fetchData = async () => {
       setIsLoading(true);
       try {
           const remoteData = await readData();
-          if (remoteData) {
-            setData(remoteData);
-          } else {
-            const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
-            const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
-            await writeData(initialData);
-            setData(initialData);
-          }
+          setData(remoteData);
       } catch (error) {
           console.error("Failed to fetch data from Firebase", error);
           toast({
-              title: "Error",
-              description: "Could not load event data. Using default data.",
+              title: "Error Loading Data",
+              description: "Could not load event data. Displaying default data.",
               variant: "destructive"
           });
+          // Set default data on error
           const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
           setData({ ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() });
       } finally {
@@ -40,17 +36,13 @@ export function useMelaData() {
       }
     };
     
-    // Ensure this only runs on the client
-    if (typeof window !== "undefined") {
-        fetchData();
-    }
-
+    fetchData();
   }, [toast]);
 
   const updateData = useCallback(async (newData: MelaData) => {
     try {
         await writeData(newData);
-        setData(newData);
+        setData(newData); // Optimistically update the local state
          toast({
             title: "Success!",
             description: "Event details have been updated."
@@ -58,7 +50,7 @@ export function useMelaData() {
     } catch(error) {
         console.error("Failed to update data in Firebase", error);
         toast({
-            title: "Error",
+            title: "Error Saving Data",
             description: "Could not save changes. Please check your connection and try again.",
             variant: "destructive"
         });
