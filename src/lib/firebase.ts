@@ -15,18 +15,22 @@ const firebaseConfig = {
   "databaseURL": "https://melaverse-default-rtdb.firebaseio.com"
 };
 
-// Initialize Firebase only on the client side, and only once.
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const database = getDatabase(app);
+function getFirebase() {
+    const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    const database = getDatabase(app);
+    return { app, database };
+}
 
 const DB_KEY = 'melaData';
 
 export async function writeData(data: MelaData) {
+  const { database } = getFirebase();
   return set(ref(database, DB_KEY), data);
 }
 
 export async function readData(): Promise<MelaData> {
   try {
+    const { database } = getFirebase();
     const snapshot = await get(ref(database, DB_KEY));
     if (snapshot.exists()) {
       return snapshot.val();
