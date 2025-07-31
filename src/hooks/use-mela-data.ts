@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { MelaData } from '@/lib/types';
 import { readData, writeData } from '@/lib/firebase';
 import { useToast } from './use-toast';
+import { defaultMelaData } from '@/lib/data';
 
 
 export function useMelaData() {
