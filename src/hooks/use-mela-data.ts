@@ -21,8 +21,6 @@ export function useMelaData() {
           if (remoteData) {
             setData(remoteData);
           } else {
-            // This case should ideally not happen if readData handles initialization,
-            // but it's here as a fallback.
             const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
             const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
             await writeData(initialData);
@@ -35,7 +33,6 @@ export function useMelaData() {
               description: "Could not load event data. Using default data.",
               variant: "destructive"
           });
-          // Fallback to local default data on error
           const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
           setData({ ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() });
       } finally {
