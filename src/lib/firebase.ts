@@ -1,5 +1,5 @@
 
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApp, getApps } from 'firebase/app';
 import { getDatabase, ref, set, get } from "firebase/database";
 import { defaultMelaData } from './data';
 import type { MelaData } from './types';
@@ -15,7 +15,8 @@ const firebaseConfig = {
   "databaseURL": "https://melaverse-default-rtdb.firebaseio.com"
 };
 
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase only on the client side, and only once.
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const database = getDatabase(app);
 
 const DB_KEY = 'melaData';

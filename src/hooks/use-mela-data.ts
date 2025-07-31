@@ -21,7 +21,8 @@ export function useMelaData() {
           if (remoteData) {
             setData(remoteData);
           } else {
-            // Handle case where firebase has no data, use default and set a date
+            // This case should ideally not happen if readData handles initialization,
+            // but it's here as a fallback.
             const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
             const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
             await writeData(initialData);
@@ -41,7 +42,12 @@ export function useMelaData() {
         setIsLoading(false);
       }
     };
-    fetchData();
+    
+    // Ensure this only runs on the client
+    if (typeof window !== "undefined") {
+        fetchData();
+    }
+
   }, [toast]);
 
   const updateData = useCallback(async (newData: MelaData) => {
