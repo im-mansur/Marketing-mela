@@ -12,6 +12,7 @@ const firebaseConfig = {
   "authDomain": "melaverse.firebaseapp.com",
   "measurementId": "",
   "messagingSenderId": "682028400877",
+  "databaseURL": "https://melaverse-default-rtdb.firebaseio.com"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -24,14 +25,21 @@ export async function writeData(data: MelaData) {
 }
 
 export async function readData(): Promise<MelaData> {
-  const snapshot = await get(ref(database, DB_KEY));
-  if (snapshot.exists()) {
-    return snapshot.val();
-  } else {
-    // If no data, initialize with default and return that.
+  try {
+    const snapshot = await get(ref(database, DB_KEY));
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      // If no data, initialize with default and return that.
+      const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+      const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
+      await writeData(initialData);
+      return initialData;
+    }
+  } catch (error) {
+    console.error("Error reading data from Firebase:", error);
+    // Fallback to default data in case of error
     const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
-    const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
-    await writeData(initialData);
-    return initialData;
+    return { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
   }
 }

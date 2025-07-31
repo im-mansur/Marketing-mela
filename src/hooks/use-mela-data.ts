@@ -10,21 +10,27 @@ import { defaultMelaData } from '@/lib/data';
 
 export function useMelaData() {
   const [data, setData] = useState<MelaData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
     const fetchData = async () => {
-        try {
-            const remoteData = await readData();
-            setData(remoteData);
-        } catch (error) {
-            console.error("Failed to fetch data from Firebase", error);
-            toast({
-                title: "Error",
-                description: "Could not load event data. Please try again later.",
-                variant: "destructive"
-            });
-        }
+      setIsLoading(true);
+      try {
+          const remoteData = await readData();
+          setData(remoteData);
+      } catch (error) {
+          console.error("Failed to fetch data from Firebase", error);
+          toast({
+              title: "Error",
+              description: "Could not load event data. Using default data.",
+              variant: "destructive"
+          });
+          const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+          setData({ ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() });
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchData();
   }, [toast]);
@@ -47,5 +53,5 @@ export function useMelaData() {
     }
   }, [toast]);
   
-  return { data, updateData, isLoading: data === null };
+  return { data, updateData, isLoading };
 }
