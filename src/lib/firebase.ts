@@ -12,7 +12,6 @@ const firebaseConfig = {
   "authDomain": "melaverse.firebaseapp.com",
   "measurementId": "",
   "messagingSenderId": "682028400877",
-  "databaseURL": "https://melaverse-default-rtdb.firebaseio.com"
 };
 
 const app = initializeApp(firebaseConfig);
