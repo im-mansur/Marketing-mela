@@ -18,7 +18,15 @@ export function useMelaData() {
       setIsLoading(true);
       try {
           const remoteData = await readData();
-          setData(remoteData);
+          if (remoteData) {
+            setData(remoteData);
+          } else {
+            // Handle case where firebase has no data, use default and set a date
+            const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+            const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
+            await writeData(initialData);
+            setData(initialData);
+          }
       } catch (error) {
           console.error("Failed to fetch data from Firebase", error);
           toast({
@@ -26,6 +34,7 @@ export function useMelaData() {
               description: "Could not load event data. Using default data.",
               variant: "destructive"
           });
+          // Fallback to local default data on error
           const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
           setData({ ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() });
       } finally {
