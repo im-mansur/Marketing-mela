@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -22,7 +21,7 @@ export function SiteFooter() {
                 </p>
                 <p className="text-center text-sm leading-loose md:text-left">
                     {footer.line2Prefix}<span className="font-bold">
-                        <Link href="/admin" legacyBehavior><a className="hover:underline">M</a></Link>{footer.line2LinkText}
+                        <Link href="/admin" className="hover:underline">M</Link>{footer.line2LinkText}
                     </span>.
                 </p>
             </div>
