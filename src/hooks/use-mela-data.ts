@@ -20,7 +20,9 @@ export function useMelaData() {
       // We call this to set up the Socket.IO server on the backend.
       await fetch('/api/socket');
       
-      socket = io();
+      socket = io({
+        path: '/api/socket_io'
+      });
 
       socket.on('connect', () => {
         console.log('Socket connected');
