@@ -15,17 +15,20 @@ export function useMelaData() {
   const { toast } = useToast();
 
   const socketInitializer = useCallback(async () => {
+    // We call this on the client side only, so we can safely fetch the API route
     await fetch('/api/socket');
     socket = io();
 
     socket.on('connect', () => {
       console.log('connected');
+      // Request initial data when connected
       socket.emit('get-initial-data');
     });
 
     socket.on('initial-data', (initialData: MelaData) => {
+        // Use initial data from server, but ensure eventDate is in the future
         const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
-        const dataWithDate = { ...initialData, eventDate: fifteenDaysFromNow.toISOString() };
+        const dataWithDate = { ...initialData, eventDate: initialData.eventDate || fifteenDaysFromNow.toISOString() };
         setData(dataWithDate);
         setIsLoading(false);
     });
@@ -37,19 +40,21 @@ export function useMelaData() {
         description: "The event data has been updated live.",
       });
     });
-
+    
+    // Disconnect socket on cleanup
     return () => {
-      socket.off('connect');
-      socket.off('initial-data');
-      socket.off('data-updated');
+        socket.disconnect();
     }
+
   }, [toast]);
 
   useEffect(() => {
-    const cleanup = socketInitializer();
+    // Initialize socket connection
+    const cleanupPromise = socketInitializer();
+    
+    // Return the cleanup function
     return () => {
-      // @ts-ignore
-      cleanup.then(fn => fn());
+      cleanupPromise.then(cleanup => cleanup());
     }
   }, [socketInitializer]);
   
