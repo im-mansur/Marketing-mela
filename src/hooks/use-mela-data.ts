@@ -14,49 +14,44 @@ export function useMelaData() {
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  const socketInitializer = useCallback(async () => {
-    // We call this on the client side only, so we can safely fetch the API route
-    await fetch('/api/socket');
-    socket = io();
-
-    socket.on('connect', () => {
-      console.log('connected');
-      // Request initial data when connected
-      socket.emit('get-initial-data');
-    });
-
-    socket.on('initial-data', (initialData: MelaData) => {
-        // Use initial data from server, but ensure eventDate is in the future
-        const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
-        const dataWithDate = { ...initialData, eventDate: initialData.eventDate || fifteenDaysFromNow.toISOString() };
-        setData(dataWithDate);
-        setIsLoading(false);
-    });
-
-    socket.on('data-updated', (updatedData: MelaData) => {
-      setData(updatedData);
-      toast({
-        title: "Update Received!",
-        description: "The event data has been updated live.",
-      });
-    });
-    
-    // Disconnect socket on cleanup
-    return () => {
-        socket.disconnect();
-    }
-
-  }, [toast]);
-
   useEffect(() => {
-    // Initialize socket connection
-    const cleanupPromise = socketInitializer();
-    
-    // Return the cleanup function
-    return () => {
-      cleanupPromise.then(cleanup => cleanup());
+    // This function will run only on the client side.
+    const socketInitializer = async () => {
+      // We call this to set up the Socket.IO server on the backend.
+      await fetch('/api/socket');
+      
+      socket = io();
+
+      socket.on('connect', () => {
+        console.log('Socket connected');
+        socket.emit('get-initial-data');
+      });
+
+      socket.on('initial-data', (initialData: MelaData) => {
+          const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+          const dataWithDate = { ...initialData, eventDate: initialData.eventDate || fifteenDaysFromNow.toISOString() };
+          setData(dataWithDate);
+          setIsLoading(false);
+      });
+
+      socket.on('data-updated', (updatedData: MelaData) => {
+        setData(updatedData);
+        toast({
+          title: "Update Received!",
+          description: "The event data has been updated live.",
+        });
+      });
     }
-  }, [socketInitializer]);
+
+    socketInitializer();
+
+    // This is the cleanup function that will be called when the component unmounts.
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  }, [toast]);
   
   const updateData = useCallback((newData: MelaData) => {
     if (socket) {
