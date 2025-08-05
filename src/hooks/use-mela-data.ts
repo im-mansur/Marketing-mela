@@ -5,9 +5,6 @@ import { useState, useEffect, useCallback } from 'react';
 import type { MelaData } from '@/lib/types';
 import { useToast } from './use-toast';
 import { defaultMelaData } from '@/lib/data';
-import io, { Socket } from 'socket.io-client';
-
-let socket: Socket;
 
 export function useMelaData() {
   const [data, setData] = useState<MelaData | null>(null);
@@ -15,54 +12,22 @@ export function useMelaData() {
   const { toast } = useToast();
 
   useEffect(() => {
-    // This function will run only on the client side.
-    const socketInitializer = async () => {
-      // We call this to set up the Socket.IO server on the backend.
-      await fetch('/api/socket');
-      
-      socket = io({
-        path: '/api/socket_io'
-      });
-
-      socket.on('connect', () => {
-        console.log('Socket connected');
-        socket.emit('get-initial-data');
-      });
-
-      socket.on('initial-data', (initialData: MelaData) => {
-          const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
-          const dataWithDate = { ...initialData, eventDate: initialData.eventDate || fifteenDaysFromNow.toISOString() };
-          setData(dataWithDate);
-          setIsLoading(false);
-      });
-
-      socket.on('data-updated', (updatedData: MelaData) => {
-        setData(updatedData);
-        toast({
-          title: "Update Received!",
-          description: "The event data has been updated live.",
-        });
-      });
-    }
-
-    socketInitializer();
-
-    // This is the cleanup function that will be called when the component unmounts.
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, [toast]);
+    // Since we are not using a real-time backend anymore,
+    // we just load the default data.
+    const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+    const dataWithDate = { ...defaultMelaData, eventDate: defaultMelaData.eventDate || fifteenDaysFromNow.toISOString() };
+    setData(dataWithDate);
+    setIsLoading(false);
+  }, []);
   
   const updateData = useCallback((newData: MelaData) => {
-    if (socket) {
-      socket.emit('update-data', newData);
-       toast({
-          title: "Success!",
-          description: "Your changes have been broadcasted.",
-      });
-    }
+    // Update the data in the local state.
+    // This will not persist across reloads or be shared with other users.
+    setData(newData);
+    toast({
+        title: "Success!",
+        description: "Your changes have been saved locally.",
+    });
   }, [toast]);
   
   return { data, updateData, isLoading };
