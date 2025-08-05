@@ -16,7 +16,6 @@ export function useMelaData() {
     // This hook now uses local state instead of Firebase.
     // It initializes the data with a default set.
     const loadDefaultData = () => {
-      setIsLoading(true);
       try {
         const fifteenDaysFromNow = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
         const initialData = { ...defaultMelaData, eventDate: fifteenDaysFromNow.toISOString() };
