@@ -18,36 +18,36 @@ export function ContactSection({ contact }: ContactSectionProps) {
           <p className="text-lg text-muted-foreground mt-2">We'd love to hear from you!</p>
         </div>
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          <Card className="text-center">
+          <Card className="text-center flex flex-col">
             <CardHeader>
               <LucideIcons.Mail className="w-12 h-12 mx-auto text-primary" />
               <CardTitle>Email Us</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col justify-between flex-grow">
               <p className="text-muted-foreground">Send your queries to our team.</p>
-              <Button variant="link" asChild className="text-accent text-lg p-0 h-auto">
+              <Button variant="link" asChild className="text-accent text-lg p-0 h-auto mt-2">
                 <a href={`mailto:${contact.email}`}>{contact.email}</a>
               </Button>
             </CardContent>
           </Card>
-          <Card className="text-center">
+          <Card className="text-center flex flex-col">
             <CardHeader>
               <LucideIcons.Phone className="w-12 h-12 mx-auto text-primary" />
               <CardTitle>Call Us</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col justify-between flex-grow">
               <p className="text-muted-foreground">Talk to our event coordinators.</p>
-              <Button variant="link" asChild className="text-accent text-lg p-0 h-auto">
+              <Button variant="link" asChild className="text-accent text-lg p-0 h-auto mt-2">
                 <a href={`tel:${contact.phone}`}>{contact.phone}</a>
               </Button>
             </CardContent>
           </Card>
-          <Card className="text-center">
+          <Card className="text-center flex flex-col">
             <CardHeader>
               <LucideIcons.Share2 className="w-12 h-12 mx-auto text-primary" />
               <CardTitle>Follow Us</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col justify-between flex-grow">
               <p className="text-muted-foreground">Stay updated on social media.</p>
               <div className="flex justify-center gap-4 mt-2">
                 {contact.socials.map((social) => {
