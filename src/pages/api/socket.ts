@@ -55,6 +55,7 @@ export default function handler(
     req.on('end', () => {
       try {
         const data: MelaData = JSON.parse(body);
+        // This is the crucial part: emit to all connected sockets.
         res.socket.server.io?.emit('data-updated', data);
         res.status(200).json({ success: true });
       } catch (error) {
